@@ -20,5 +20,8 @@ class Solution:
         for i in range(n):
             for j in range(m):
                 if board[i][j] == word[0]:
+                    temp = board[i][j]
+                    board[i][j] = '#'
                     if dfs(1, i, j): return True
+                    board[i][j] = temp
         return False
