@@ -1,18 +1,18 @@
 import math
 class Solution:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
-        low, high = 1, max(piles)
-
-        def solve(idx):
-            curr = 0
-            for i in piles:
-                curr += math.ceil(i / idx)
-            return curr <= h
-
+        low, high = 0, max(piles)
         ans = 0
+
+        def possible(idx):
+            hrs = 0
+            for i in piles:
+                hrs += math.ceil(i / idx)
+            return hrs <= h
+
         while low <= high:
             mid = low + (high - low) // 2
-            if solve(mid):
+            if possible(mid):
                 ans = mid
                 high = mid - 1
             else:
