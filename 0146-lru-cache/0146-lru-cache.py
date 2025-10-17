@@ -1,52 +1,54 @@
 class Node:
-    def __init__(self,key,val):
-        self.key=key
-        self.val=val
-        self.next=None
-        self.prev=None
-
+    def __init__(self, key, val):
+        self.val = val
+        self.key = key
+        self.next = None
+        self.prev = None
 
 class LRUCache:
     def __init__(self, capacity: int):
-        self.dict = {}
+        self.lru = {}
         self.capacity = capacity
-        self.head=Node(0,0)
-        self.tail=Node(0,0)
-        self.head.next=self.tail
-        self.tail.prev=self.head
-        
+        self.head = Node(0, 0)
+        self.tail = Node(0, 0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
 
     def get(self, key: int) -> int:
-        if key in self.dict:
-            n=self.dict[key]
-            self._remove(n)
-            self._add(n)
-            return n.val
+        if key in self.lru:
+            y = self.lru[key]
+            self.remove(self.lru[key])
+            self.add(y)
+            return y.val
         return -1
 
     def put(self, key: int, value: int) -> None:
-        if key in self.dict:
-            self._remove(self.dict[key])
-        n=Node(key,value)
-        self._add(n)
-        self.dict[key]=n
-        if len(self.dict) > self.capacity:
-            n=self.head.next
-            self._remove(n)
-            del self.dict[n.key]
+        if key in self.lru:
+            self.remove(self.lru[key])
+        elif self.capacity == len(self.lru):
+            n = self.head.next
+            self.remove(n)
+            del self.lru[n.key]
+        n = Node(key, value)
+        self.add(n)
+        self.lru[key] = n
+    
+    def remove(self, node):
+        pre = node.prev
+        nxt = node.next
+        pre.next = nxt
+        nxt.prev = pre
 
-    def _remove(self,node):
-        p=node.prev
-        n=node.next
-        p.next=n
-        n.prev=p
+    def add(self,nn):
+        pre = self.tail.prev
+        nxt = self.tail
+        nn.prev = pre
+        nn.next = nxt
+        pre.next = nn
+        nxt.prev = nn
 
-    def _add(self,node):
-        k=self.tail.prev
-        node.next=self.tail
-        node.prev=k
-        k.next=node
-        self.tail.prev=node       
+
+        
 
 
 # Your LRUCache object will be instantiated and called as such:
