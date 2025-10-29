@@ -1,54 +1,54 @@
-class Node:
-    def __init__(self, key, val):
+class ListNode:
+    def __init__(self, val, key):
         self.val = val
         self.key = key
         self.next = None
         self.prev = None
 
 class LRUCache:
+
     def __init__(self, capacity: int):
-        self.lru = {}
         self.capacity = capacity
-        self.head = Node(0, 0)
-        self.tail = Node(0, 0)
+        self.cache = {}
+        self.head = ListNode(0, 0)
+        self.tail = ListNode(0, 0)
         self.head.next = self.tail
         self.tail.prev = self.head
 
     def get(self, key: int) -> int:
-        if key in self.lru:
-            y = self.lru[key]
-            self.remove(self.lru[key])
-            self.add(y)
-            return y.val
+        if key in self.cache:
+            n = self.cache[key]
+            self.remove(n)
+            self.add(n)
+            return n.val
         return -1
+        
 
     def put(self, key: int, value: int) -> None:
-        if key in self.lru:
-            self.remove(self.lru[key])
-        elif self.capacity == len(self.lru):
-            n = self.head.next
-            self.remove(n)
-            del self.lru[n.key]
-        n = Node(key, value)
+        if key in self.cache:
+            self.remove(self.cache[key])
+        n = ListNode(value, key)
         self.add(n)
-        self.lru[key] = n
+        if len(self.cache) == self.capacity:
+            z =self.head.next.key
+            self.remove(self.cache[z])
+            del self.cache[z]
+
+        self.cache[key] = n
     
+    def add(self, node):
+        p = self.tail.prev
+        n = self.tail
+        node.next = n
+        node.prev = p
+        p.next = node
+        n.prev = node
+
     def remove(self, node):
-        pre = node.prev
-        nxt = node.next
-        pre.next = nxt
-        nxt.prev = pre
-
-    def add(self,nn):
-        pre = self.tail.prev
-        nxt = self.tail
-        nn.prev = pre
-        nn.next = nxt
-        pre.next = nn
-        nxt.prev = nn
-
-
-        
+        p = node.prev
+        n = node.next
+        p.next = n
+        n.prev = p
 
 
 # Your LRUCache object will be instantiated and called as such:
