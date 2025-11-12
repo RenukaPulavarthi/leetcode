@@ -5,13 +5,14 @@ class Solution:
         """
         n = len(matrix)
         for i in range(n):
-            for j in range(i+1):
-                matrix[i][j],matrix[j][i] = matrix[j][i], matrix[i][j]
-        print(matrix)
+            for j in range(i+1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
         for i in range(n):
-            low, high = 0, n-1
-            while low < high:
-                matrix[i][low], matrix[i][high] = matrix[i][high], matrix[i][low]
-                low += 1
-                high -= 1
-        
+            l, r = 0, n-1
+            while l < r:
+                matrix[i][l], matrix[i][r] = matrix[i][r], matrix[i][l]
+                l += 1
+                r -= 1
+
+        return
